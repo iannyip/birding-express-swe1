@@ -5,25 +5,26 @@
     <%- include ("partial/navbar") %>
     
     <div class="container mt-4">
-      <h1>Submit a sighting</h1>
-      <form action="/note" method="POST">
+      <h1>Edit sighting <%= noteObj.id %></h1>
+      <hr class="my-4">
+      <form action="/note/<%= noteObj.id %>/edit?_method=PUT" method="POST">
         <div class="form-group row">
           <label for="date" class="col-form-label col-sm-3">Sighting Date</label>
-          <input type="date" id="date" name="date" class="form-control col-sm-9">
+          <input type="date" id="date" name="date" class="form-control col-sm-9" value="<%= noteObj.date %>">
         </div>
         <div class="form-group row">
           <label for="time" class="col-form-label col-sm-3">Sighting Time</label>
-          <input type="time" id="time" name="time" class="form-control col-sm-9">
+          <input type="time" id="time" name="time" class="form-control col-sm-9" value="<%= noteObj.time %>">
         </div>
         <div class="form-group row">
           <label for="behaviour" class="col-form-label col-sm-3">Behaviour</label>
-          <input type="text" id="behaviour" name="behaviour" class="form-control col-sm-9">
+          <input type="text" id="behaviour" name="behaviour" class="form-control col-sm-9" value="<%= noteObj.behaviour %>">
         </div>
         <div class="form-group row">
           <label for="flock_size" class="col-form-label col-sm-3">Flock Size</label>
-          <input type="number" id="flock_size" name="flock_size" class="form-control col-sm-9">
+          <input type="number" id="flock_size" name="flock_size" class="form-control col-sm-9" value="<%= noteObj.flock_size %>">
         </div>
-        <button type="submit" class="btn btn-primary">Submit</button>
+        <button type="submit" class="btn btn-primary">Update</button>
       </form>
       
     </div>

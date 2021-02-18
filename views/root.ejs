@@ -11,20 +11,30 @@
         <thead>
           <tr>
             <th scope="col">id</th>
-            <th scope="col">Date Time</th>
+            <th scope="col">Date</th>
+            <th scope="col">Time</th>
             <th scope="col">Behaviour</th>
-            <th scope="col">Flock Size</th>
-            <th scope="col">Link</th>
+            <th scope="col text-center">Flock Size</th>
+            <th scope="col text-center">Link</th>
+            <th scope="col text-center">Delete</th>
           </tr>
         </thead>
         <tbody>
           <% rootTableData.forEach(noteObj =>{ %>
             <tr>
               <th scope="row"><%= noteObj.id %></th>
-              <th><%= noteObj.datetime %></th>
+              <th><%= noteObj.date %></th>
+              <th><%= noteObj.time %></th>
               <th><%= noteObj.behaviour %></th>
-              <th><%= noteObj.flock_size %></th>
-              <th><a href="/note/<%= noteObj.id %>">Link</a></th>
+              <th class="text-center"><%= noteObj.flock_size %></th>
+              <th class="text-center"><a href="/note/<%= noteObj.id %>">
+                <i class="bi bi-box-arrow-up-right"></i>
+              </a></th>
+              <th class="text-center">
+                <form action="/note/<%= noteObj.id %>/delete?_method=DELETE" method="POST" class="align-text-top">
+                  <button type="submit" class='btn py-0'> <i class="bi bi-trash" style="color: cornflowerblue"></i> </button>
+              </form>
+              </th>
             </tr>
           <% }) %>
         </tbody>

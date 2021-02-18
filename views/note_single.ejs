@@ -9,10 +9,28 @@
 
     <div class="container mt-4">
       <h1>Sighting ID <%= noteObj.id %></h1>
-      <div class="row">
-        <h3>ID: </h3>
-        <%= noteObj.id%>
-      </div>
+      <hr class="mt-4">
+      <form action="">
+        <div class="form-group row">
+          <label for="noteID" class="col-sm-2 col-form-label"><b>ID</b></label>
+          <input type="text" readonly class="col-sm-10 form-control-plaintext pl-4" id="noteID" value ="<%= noteObj.id %>">
+        </div>
+        <div class="form-group row">
+          <label for="datetime" class="col-sm-2 col-form-label"><b>Date Time</b></label>
+          <input type="text" readonly class="col-sm-10 form-control-plaintext pl-4" id="datetime" value ="<%= noteObj.datetime %>">
+        </div>
+        <div class="form-group row">
+          <label for="behaviour" class="col-sm-2 col-form-label"><b>Behaviour</b></label>
+          <input type="text" readonly class="col-sm-10 form-control-plaintext pl-4" id="behaviour" value ="<%= noteObj.behaviour %>">
+        </div>
+        <div class="form-group row">
+          <label for="flock_size" class="col-sm-2 col-form-label"><b>Flock Size</b></label>
+          <input type="text" readonly class="col-sm-10 form-control-plaintext pl-4" id="flock_size" value ="<%= noteObj.flock_size %>">
+        </div>
+      </form>
+      <form action="/note/<%= noteObj.id %>/edit" method="GET">
+        <button type="submit" class='btn btn-primary'>Edit</button>
+      </form>
     </div>
     <%- include('partial/requiredjs')%>
   </body>
