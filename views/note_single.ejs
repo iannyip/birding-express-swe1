@@ -1,0 +1,19 @@
+<!DOCTYPE html>
+
+
+<html>
+  <%- include('partial/head') %>
+
+  <body>
+    <%- include('partial/navbar')%>
+
+    <div class="container mt-4">
+      <h1>Sighting ID <%= noteObj.id %></h1>
+      <div class="row">
+        <h3>ID: </h3>
+        <%= noteObj.id%>
+      </div>
+    </div>
+    <%- include('partial/requiredjs')%>
+  </body>
+</html>

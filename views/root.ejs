@@ -1,0 +1,37 @@
+<!DOCTYPE html>
+<html>
+  <%- include('partial/head') %>
+  <body>
+    <%- include ("partial/navbar") %>
+
+    <!-- Insert code here -->
+    <div class="container mt-3">
+      <h1> Bird Sightings</h1>
+      <table class="table">
+        <thead>
+          <tr>
+            <th scope="col">id</th>
+            <th scope="col">Date Time</th>
+            <th scope="col">Behaviour</th>
+            <th scope="col">Flock Size</th>
+            <th scope="col">Link</th>
+          </tr>
+        </thead>
+        <tbody>
+          <% rootTableData.forEach(noteObj =>{ %>
+            <tr>
+              <th scope="row"><%= noteObj.id %></th>
+              <th><%= noteObj.datetime %></th>
+              <th><%= noteObj.behaviour %></th>
+              <th><%= noteObj.flock_size %></th>
+              <th><a href="/note/<%= noteObj.id %>">Link</a></th>
+            </tr>
+          <% }) %>
+        </tbody>
+
+      </table>
+
+    </div>
+    <%- include ("partial/requiredjs") %>
+  </body>
+</html>

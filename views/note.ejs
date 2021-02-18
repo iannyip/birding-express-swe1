@@ -1,0 +1,34 @@
+<!DOCTYPE html>
+<html>
+  <%- include('partial/head') %>
+  <body>
+    <%- include ("partial/navbar") %>
+    
+    <div class="container mt-4">
+      <h1>Submit a sighting</h1>
+      <form action="/note" method="POST">
+        <div class="form-group">
+          <label for="date">Sighting Date</label>
+          <input type="date" id="date" name="date" class="form-control">
+        </div>
+        <div class="form-group">
+          <label for="time">Sighting Time</label>
+          <input type="time" id="time" name="time" class="form-control">
+        </div>
+        <div class="form-group">
+          <label for="behaviour">Behaviour</label>
+          <input type="text" id="behaviour" name="behaviour" class="form-control">
+        </div>
+        <div class="form-group">
+          <label for="flock_size">Flock Size</label>
+          <input type="number" id="flock_size" name="flock_size" class="form-control">
+        </div>
+        <button type="submit" class="btn btn-primary">Submit</button>
+      </form>
+      
+    </div>
+    
+
+    <%- include ('partial/requiredjs') %>
+  </body>
+</html>
