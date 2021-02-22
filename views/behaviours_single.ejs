@@ -1,0 +1,52 @@
+<!DOCTYPE html>
+<html>
+  <%- include ('partial/head') %>
+
+  <body>
+    <%- include ('partial/navbar') %>
+    <div class="container mt-4">
+      <h1>Sightings of <%= %> behaviour</h1>
+      <hr class="m-4">
+      <table class="table">
+        <thead>
+          <tr>
+            <th scope="col">id</th>
+            <th scope="col">Date</th>
+            <th scope="col">Time</th>
+            <th scope="col">Behaviour</th>
+            <th scope="col">Flock Size</th>
+            <th scope="col">User</th>
+            <th scope="col">Link</th>
+            <th scope="col">Delete</th>
+          </tr>
+        </thead>
+        <tbody>
+          <% notesData.forEach(note => { %>
+            <tr>
+              <th><%= note.id %></th>
+              <th><%= note.date %></th>
+              <th><%= note.time %></th>
+              <th><%= note.behaviour_id %></th>
+              <th><%= note.flock_size %></th>
+              <th><%= note.user_id %></th>
+              <th><a href="/note/<%= note.id %>">
+                <i class="bi bi-box-arrow-up-right"></i>
+              </a></th>
+              <th>
+                <form action="/note/<%= note.id %>/delete?_method=DELETE" method="POST" class="align-text-top">
+                  <button type="submit" class='btn py-0'> <i class="bi bi-trash" style="color: cornflowerblue"></i> </button>
+              </form>  
+              </th>
+            </tr>
+          <% }); %>
+        </tbody>
+        <tbody>
+
+        </tbody>
+
+      </table>
+    </div>
+
+    <%- include ('partial/requiredjs') %>
+  </body>
+</html>

@@ -1,0 +1,39 @@
+<!DOCTYPE html>
+<html>
+  <%- include ('partial/head') %>
+
+  <body>
+    <%- include ('partial/navbar') %>
+    <div class="container mt-4">
+      <h1>All bird behaviours</h1>
+      <hr class="mt-4">
+      <table class='table'>
+        <thead>
+          <tr>
+            <th>No.</th>
+            <th>Behaviour</th>
+            <th class='text-center'>Count</th>
+            <th class='text-center'>Related Sightings</th>
+          </tr>
+        </thead>
+        <% allBehaviourArr.forEach(behaviour => { %>
+          <tr>
+            <th><%= behaviour.id %></th>
+            <td><%= behaviour.name %></td>
+            <td class='text-center'><%= behaviour.count %></td>
+            <td class='text-center'>
+              <a href="/behaviours/<%= behaviour.id %>">
+                <i class="bi bi-box-arrow-up-right"></i>
+              </a>
+            </td>
+          </tr>
+        <% }); %>
+        <tbody>
+
+        </tbody>
+      </table>
+    </div>
+
+    <%- include ('partial/requiredjs') %>
+  </body>
+</html>

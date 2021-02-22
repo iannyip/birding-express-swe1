@@ -1,0 +1,32 @@
+<!DOCTYPE html>
+
+<html>
+
+  <%- include ('partial/head') %>
+
+  <body>
+    <%- include ('partial/navbar') %>
+    
+    <div class="container mt-4">      
+      <h1>Add a new species</h1>
+      <hr class="my-4">
+      <form action="/species" METHOD="POST">
+        <div class="form-group row">
+          <label for="name" class='col-form-label col-sm-3'>Name</label>
+          <input type="text" id='name' class='form-control col-sm-9' name='name'>
+        </div>
+        <div class="form-group row">
+          <label for="scientific_name" class='col-form-label col-sm-3'>Scientific name</label>
+          <input type="text" id='scientific_name' class='form-control col-sm-9' name='scientific_name'>
+        </div>
+        <div class="form-group row justify-content-end">
+          <div class="col-sm-9 pl-0">
+            <button type='submit' class='btn btn-primary'>Submit</button>
+          </div>
+        </div>
+      </form>
+    </div>
+
+    <%- include ('partial/requiredjs') %>
+  </body>
+</html>

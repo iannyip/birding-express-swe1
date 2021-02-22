@@ -1,0 +1,36 @@
+<!DOCTYPE html>
+<html>
+  <%- include ('partial/head') %>
+
+  <body>
+    <%- include ('partial/navbar') %>
+    <div class='container mt-4'>
+      <h1>All Bird Species</h1>
+      <hr class='my-4'>
+      <table class='table'>
+        <thead>
+          <tr >
+            <th>id</th>
+            <th>Name</th>
+            <th>Scientific Name</th>
+            <th>Link</th>
+          </tr>
+        </thead>
+        <tbody>
+          <% allSpeciesData.forEach(species => { %>
+            <tr>
+              <th scope="row"><%= species.id %></th>
+              <td><%= species.name %></td>
+              <td><%= species.scientific_name %></td>
+              <td><a href="/species/<%= species.id %>">
+                <i class="bi bi-box-arrow-up-right"></i>
+              </a></td>
+            </tr>
+          <% }); %>
+        </tbody>
+      </table>
+    </div>
+
+    <%- include ('partial/requiredjs') %>
+  </body>
+</html>

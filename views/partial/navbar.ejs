@@ -1,9 +1,13 @@
 <nav class="navbar navbar-expand-lg navbar-dark bg-dark">
+  <!-- Brand Logo -->
   <a class="navbar-brand" href="/">Birds</a>
+
+  <!-- For drop down button -->
   <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarSupportedContent" aria-controls="navbarSupportedContent" aria-expanded="false" aria-label="Toggle navigation">
     <span class="navbar-toggler-icon"></span>
   </button>
 
+  <!-- For elements in drop down / navbar -->
   <div class="collapse navbar-collapse" id="navbarSupportedContent">
     <ul class="navbar-nav mr-auto">
       <li class="nav-item active">
@@ -13,8 +17,20 @@
         <a class="nav-link" href="/note">Note</a>
       </li>
       <li class="nav-item">
+        <a class="nav-link" href="/species">Add species</a>
+      </li>
+      <li class="nav-item">
+        <a class="nav-link" href="/species/all">All species</a>
+      </li>
+      <li class="nav-item">
+        <a class="nav-link" href="/behaviours">Behaviours</a>
+      </li>
+      <li class="nav-item active">
+        <a class="nav-link" href="/user">My Activity <span class="sr-only">(current)</span></a>
+      </li>
+      <li class="nav-item">
         <form action="/logout?_method=DELETE" method = "POST">
-          <button type="submit" class="nav-link btn btn-danger">Logout</button>
+          <button type="submit" class="nav-link btn btn-danger px-3">Logout</button>
         </form>
       </li>
     </ul>
