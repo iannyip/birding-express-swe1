@@ -13,7 +13,7 @@ const pgConnectionConfig = {
   port: 5432,
 };
 const pool = new Pool(pgConnectionConfig);
-const PORT = 3004;
+const PORT = process.argv[2];
 const app = express();
 app.set("view engine", "ejs");
 app.use(express.urlencoded({ extended: false }));
