@@ -6,12 +6,24 @@ import cookieParser from "cookie-parser";
 const { Pool } = pg;
 
 // Step 2: set up
-const pgConnectionConfig = {
-  user: "iannyip",
-  host: "localhost",
-  database: "birding",
-  port: 5432,
-};
+let pgConnectionConfig;
+if (process.env.ENV === "PRODUCTION") {
+  pgConnectionConfig = {
+    user: "postgres",
+    password: process.env.DB_PASSWORD,
+    host: "localhost",
+    database: "birding",
+    port: 5432,
+  };
+} else {
+  pgConnectionConfig = {
+    user: "iannyip",
+    host: "localhost",
+    database: "birding",
+    port: 5432,
+  };
+}
+
 const pool = new Pool(pgConnectionConfig);
 const PORT = process.argv[2];
 const app = express();
