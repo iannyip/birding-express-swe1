@@ -7,20 +7,47 @@
     <div class="container mt-4">
       <h1>Your Activity</h1>
       <hr class="my-4">
-      <div class="row">
-        <div class='col-md-6'>
+      <div class="row justify-content-between">
+        <!-- For Notes -->
+        <div class='col-md-8'>
+          <h3>Notes</h3>
           <div class="row">
-            <h3>Notes</h3>
-            <% userActivity.notes.forEach(note => { %>
-              <div class="col-12">
-                
+            <% notes.forEach(note => { %>
+              <div class="col-4">
+                <div class="card my-2">
+                  <div class="card-header">
+                    <a style="float:right;" href="/note/<%= note.id %>">
+                      <i class="bi bi-box-arrow-up-right"></i>
+                    </a>
+                    <h6 class="card-title"><%= new Date(note.date).toDateString()%></h6>
+                  </div>
+                  <div class="card-body">
+                    <h6 class="card-subtitle mb-2" style="min-height:38px;"><%= note.species %></h6>
+                    <p>Behaviour: <%= note.behaviour %></p>
+                    <p>Flock size: <%= note.flock_size%></p>
+                  </div>
+                </div>
+
               </div>
             <% }); %>
           </div>
-          
-
         </div>
-        <div class='col-md-6'></div>
+        <div class='col-md-3'>
+          <h3>Comments</h3>
+          <hr>
+          <div class="row">
+            <% comments.forEach(comment => { %>
+              <div class='col-12'>
+                <a style="float:right;" href="/note/<%= comment.note_id %>">
+                  <i class="bi bi-box-arrow-up-right"></i>
+                </a>
+                <p class="mb-0"><%= comment.comment %></p>
+                <i class="text-muted my-0">date</i>
+                <hr>
+              </div>
+            <% }); %>
+          </div>
+        </div>
       </div>
     </div>
 

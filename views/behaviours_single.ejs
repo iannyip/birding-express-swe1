@@ -5,7 +5,7 @@
   <body>
     <%- include ('partial/navbar') %>
     <div class="container mt-4">
-      <h1>Sightings of <%= %> behaviour</h1>
+      <h1>Sightings of <%= notesData[0].behaviour %></h1>
       <hr class="m-4">
       <table class="table">
         <thead>
@@ -14,6 +14,7 @@
             <th scope="col">Date</th>
             <th scope="col">Time</th>
             <th scope="col">Behaviour</th>
+            <th scope="col">Species</th>
             <th scope="col">Flock Size</th>
             <th scope="col">User</th>
             <th scope="col">Link</th>
@@ -26,9 +27,10 @@
               <th><%= note.id %></th>
               <th><%= note.date %></th>
               <th><%= note.time %></th>
-              <th><%= note.behaviour_id %></th>
+              <th><%= note.behaviour %></th>
+              <th><%= note.species %></th>
               <th><%= note.flock_size %></th>
-              <th><%= note.user_id %></th>
+              <th><%= note.email %></th>
               <th><a href="/note/<%= note.id %>">
                 <i class="bi bi-box-arrow-up-right"></i>
               </a></th>

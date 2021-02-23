@@ -29,7 +29,6 @@ const joinDateTime = (inputDate, inputTime) => {
 const separateDateTime = (inputDateTime) => {
   const Date = inputDateTime.toISOString().substring(0, 10);
   const Time = inputDateTime.toLocaleTimeString("en-SG");
-  console.log(inputDateTime);
   return [Date, Time];
 };
 
@@ -50,19 +49,24 @@ app.get("/note", (request, response) => {
   // Get the ID of the user
   const { userId }= request.cookies;
   console.log(userId);
-  pool.query('SELECT * FROM behaviours', (error, result) => {
-    if (error) {
-      console.log("error", error);
-    } else{
-      const allBehaviourArr = result.rows;
-      console.log(allBehaviourArr);
-      const noteData = {
-        behaviours: allBehaviourArr,
-        id: userId,
-      }
+  const noteData = {};
+  pool
+    .query('SELECT * FROM behaviours')
+    .then((result) => {
+      noteData.behaviours= result.rows;
+      noteData.id= userId;
+      return pool.query(`SELECT email FROM users WHERE id = ${userId}`);
+    })
+    .then((result) => {
+      noteData.email = result.rows[0].email;
+      return pool.query(`SELECT * FROM species`);
+    })
+    .then((result) => {
+      noteData.species = result.rows;
+      console.log(noteData);
       response.render("note", noteData);
-    }
-  });
+    })
+    .catch((error) => console.log(error.stack));
 });
 
 app.post("/note", (request, response) => {
@@ -74,11 +78,13 @@ app.post("/note", (request, response) => {
     submittedData.behaviour_id,
     submittedData.flock_size,
     submittedData.user_id,
+    submittedData.species_id,
   ];
   console.log(inputData);
+  console.log(submittedData);
   // Query: Input into TABLE notes
   const querySubmitSighting =
-    "INSERT INTO notes (datetime, behaviour_id, flock_size, user_id) VALUES ($1, $2, $3, $4)";
+    "INSERT INTO notes (datetime, behaviour_id, flock_size, user_id, species_id) VALUES ($1, $2, $3, $4, $5)";
   pool.query(querySubmitSighting, inputData, (error, result) => {
     if (error) {
       console.log("submit error", error);
@@ -96,34 +102,32 @@ app.get("/note/:id", (request, response) => {
   }
   const id = request.params.id;
   console.log(`GET note ${id}`);
+  
   // Query: Get note
-  const querySingleSighting = `SELECT * FROM notes WHERE id = ${id}`;
-  pool.query(querySingleSighting, (error, result) => {
-    if (error) {
-      console.log("single note error: ", error);
-    } else {
-      const queryResult = result.rows[0];
+  let queryResult;
+  const querySingleSighting = `SELECT notes.id, notes.datetime, notes.flock_size, behaviours.name as behaviour, users.email, species.name as species FROM notes INNER JOIN behaviours ON notes.behaviour_id = behaviours.id INNER JOIN users ON notes.user_id = users.id INNER JOIN species ON notes.species_id = species.id WHERE notes.id = ${id}`;
+  pool
+    .query(querySingleSighting)
+    .then((result) => {
+      queryResult = result.rows[0];
       console.log(queryResult); // This is an object
       const noteId = queryResult.id;
-      // Query: Get comments
       const queryComments = (`SELECT comments.id, comments.comment, users.email FROM comments INNER JOIN users ON comments.commenter_id = users.id WHERE note_id = ${noteId} ORDER BY comments.id DESC`);
-      pool.query(queryComments, (errorComment, resultComment) => {
-        if (errorComment) {
-          console.log("error: ", errorComment);
-        } else {
-          queryResult.comments = resultComment.rows; // This is an array;
-          queryResult.commenter = request.cookies.userId;
-          console.log(queryResult);
-          response.render("note_single", { noteObj: queryResult });
-        }
-      })
-    }
-  });
+      return pool.query(queryComments);
+    })
+    .then((result) => {
+      queryResult.comments = result.rows; // This is an array;
+      queryResult.commenter = request.cookies.userId;
+      queryResult.email = queryResult.email.split("@")[0];
+      console.log(queryResult);
+      response.render("note_single", { noteObj: queryResult });
+    })
+    .catch((error) => console.log(error.stack));
 });
 
 app.get("/", (request, response) => {
   console.log("GET ROOT");
-  console.log(request.cookies.userId);
+  console.log("user id: ", request.cookies.userId);
 
   // Verify login
   if (checkLoginCookie(request, response)) {
@@ -131,19 +135,19 @@ app.get("/", (request, response) => {
   }
 
   // Query: Get all information from TABLE notes
-  const queryRoot = "SELECT * FROM notes INNER JOIN behaviours ON notes.behaviour_id = behaviours.id";
+  const queryRoot = "SELECT notes.id, notes.datetime, notes.flock_size, users.email, behaviours.name AS behaviour, species.name AS species FROM notes INNER JOIN behaviours ON notes.behaviour_id = behaviours.id INNER JOIN users ON users.id = notes.user_id INNER JOIN species ON notes.species_id = species.id ORDER BY notes.id ASC";
   pool.query(queryRoot, (error, result) => {
     if (error) {
       console.log("root error: ", error.stack);
       response.status(503).send(result.rows);
       return;
     }
-    console.table(result.rows);
     const rootTableData = result.rows;
     console.log(rootTableData);
     rootTableData.forEach((note) => {
       note.date = separateDateTime(note.datetime)[0];
       note.time = separateDateTime(note.datetime)[1];
+      note.email = note.email.split("@")[0];
     });
     response.render("root", { rootTableData });
   });
@@ -285,7 +289,7 @@ app.post('/species', (request, response) =>{
     if (error) {
       console.log("error: ", error);
     } else {
-      response.redirect('/');
+      response.redirect('/species/all');
     }
   })
 })
@@ -372,7 +376,6 @@ app.delete('/species/:index/delete', (request, response) => {
 
 app.get('/behaviours', (request, response) => {
   console.log("GET behaviours");
-
   // Query: Retrieve all behaviours
   const queryBehaviour = "SELECT * FROM behaviours";
   pool.query(queryBehaviour, (error, result) => {
@@ -393,10 +396,8 @@ app.get('/behaviours', (request, response) => {
           if (counter === allBehaviourArr.length){
             response.render('behaviours', {allBehaviourArr});
           }
-
         });
       })
-      
     }
   })
 })
@@ -406,20 +407,22 @@ app.get('/behaviours/:id', (request, response) => {
   const {id} = request.params;
 
   // Query
-  const queryBehaviourId = `SELECT * FROM notes WHERE behaviour_id = ${id}`;
-  pool.query(queryBehaviourId, (error, result) => {
+  const queryRoot = `SELECT notes.id, notes.datetime, notes.flock_size, users.email, behaviours.name AS behaviour, species.name AS species FROM notes INNER JOIN behaviours ON notes.behaviour_id = behaviours.id INNER JOIN users ON users.id = notes.user_id INNER JOIN species ON notes.species_id = species.id WHERE notes.behaviour_id = ${id} ORDER BY notes.id ASC`;
+  pool.query(queryRoot, (error, result) => {
     if (error) {
-      console.log("error: ", error);
-    } else {
-      const notesData = result.rows;
-      console.log({notesData});
-      notesData.forEach((note) => {
-        note.date = separateDateTime(note.datetime)[0];
-        note.time = separateDateTime(note.datetime)[1];
-      });
-      response.render('behaviours_single', {notesData});
+      console.log("root error: ", error.stack);
+      response.status(503).send(result.rows);
+      return;
     }
-  })
+    const notesData = result.rows;
+    console.log(notesData);
+    notesData.forEach((note) => {
+      note.date = separateDateTime(note.datetime)[0];
+      note.time = separateDateTime(note.datetime)[1];
+    });
+    console.log({notesData});
+    response.render("behaviours_single", { notesData });
+  });
 })
 
 app.post('/note/:id/comment', (request, response) =>{
@@ -443,24 +446,24 @@ app.get('/user', (request, response) => {
   }
   const {userId} = request.cookies;
   const userActivity = {};
-  const queryUserActivity = `SELECT * FROM notes WHERE id=${userId}`;
-  pool.query(queryUserActivity, (noteError, noteResult) => {
-    if (noteError){
-      console.log("error: ", noteError);
-    } else{
-      userActivity.notes = noteResult.rows;
-      console.log(noteResult.rows);
-      pool.query(`SELECT * FROM comments WHERE commenter_id=${userId}`, (commentError, commentResult) => {
-        if (commentError){
-          console.log("error: ", commentError);
-        } else {
-          userActivity.comments = commentResult.rows;
-          console.log("the user has: ", userActivity);
-        }
+  const queryUserActivity = `SELECT notes.id, notes.datetime, behaviours.name AS behaviour, species.name as species, flock_size FROM notes INNER JOIN behaviours ON notes.behaviour_id = behaviours.id INNER JOIN species ON notes.species_id = species.id WHERE user_id=${userId}`;
+  pool
+    .query(queryUserActivity)
+    .then((result) => {
+      userActivity.notes = result.rows;
+      userActivity.notes.forEach(note => {
+        note.date = separateDateTime(note.datetime)[0];
+        note.time = separateDateTime(note.datetime)[1];
       })
-    }
-  })
-
+      return pool.query(`SELECT * FROM comments WHERE commenter_id=${userId}`)
+    })
+    .then((result) => {
+      userActivity.comments = result.rows;
+      console.log("#####################")
+      console.log(userActivity);
+      response.render('user', userActivity)
+    })
+    .catch((error) => console.log(error.stack));
 })
 
 

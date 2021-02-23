@@ -25,7 +25,11 @@
             </div>
             <div class="form-group row">
               <label for="behaviour" class="col-sm-3 col-form-label"><b>Behaviour</b></label>
-              <input type="text" readonly class="col-sm-9 form-control-plaintext pl-4" id="behaviour" value ="<%= noteObj.behaviour_id %>">
+              <input type="text" readonly class="col-sm-9 form-control-plaintext pl-4" id="behaviour" value ="<%= noteObj.behaviour %>">
+            </div>
+            <div class="form-group row">
+              <label for="species" class="col-sm-3 col-form-label"><b>Species</b></label>
+              <input type="text" readonly class="col-sm-9 form-control-plaintext pl-4" id="species" value ="<%= noteObj.species %>">
             </div>
             <div class="form-group row">
               <label for="flock_size" class="col-sm-3 col-form-label"><b>Flock Size</b></label>
@@ -33,7 +37,7 @@
             </div>
             <div class="form-group row">
               <label for="user" class="col-sm-3 col-form-label"><b>Reported by</b></label>
-              <input type="text" readonly class="col-sm-9 form-control-plaintext pl-4" id="user" value ="<%= noteObj.user_id %>">
+              <input type="text" readonly class="col-sm-9 form-control-plaintext pl-4" id="user" value ="<%= noteObj.email %>">
             </div>
           </form>
           <div class='row justify-content-end'>
@@ -62,8 +66,16 @@
           <div class="row">
             <% noteObj.comments.forEach(comment => { %>
               <div class="col-12">
-                <div><strong><%= comment.email %></strong></div>
-                <div><p><%= comment.comment %></p></div>
+                <div class="row">
+                  <hr class="mt-0">
+                  <div class="col-2">
+                    <span style="width:35px; height: 35px; background-color:#bbb; border-radius: 50%; display: block"></span>
+                  </div>  
+                  <div class="col-10">
+                    <div><strong><%= comment.email.split('@')[0] %></strong></div>
+                    <div><p><%= comment.comment %></p></div>
+                  </div>  
+                </div>
               </div>
             <% }) %>
           </div>

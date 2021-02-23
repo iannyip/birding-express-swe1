@@ -24,12 +24,23 @@
           </select>
         </div>
         <div class="form-group row">
+          <label for="species_id" class="col-form-label col-sm-3">Behaviour</label>
+          <select name="species_id" id="species_id" class="form-control col-sm-9">
+            <% species.forEach(speciess => { %>
+              <option value="<%= speciess.id %>"><%= speciess.name %></option>
+            <% }); %>
+          </select>
+        </div>
+        <div class="form-group row">
           <label for="flock_size" class="col-form-label col-sm-3">Flock Size</label>
           <input type="number" id="flock_size" name="flock_size" class="form-control col-sm-9">
         </div>
         <div class="form-group row">
-          <label for="user_id" class="col-form-label col-sm-3">Submitted by</label>
-          <input type="number" readonly id="user_id" name="user_id" class="form-control-plaintext col-sm-9" value = <%= id %>>
+          <label for="email" class="col-form-label col-sm-3">Submitted by</label>
+          <input type="text" readonly id="email" name="email" class="form-control-plaintext col-sm-9" value = "<%= email %>">
+        </div>
+        <div class="form-group row">
+          <input type="hidden" readonly id="user_id" name="user_id" class="form-control-plaintext col-sm-9" value = <%= id %>>
         </div>
         <div class="form-group row justify-content-end">
           <div class="col-sm-9 pl-0">

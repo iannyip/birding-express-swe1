@@ -22,9 +22,13 @@
             <td><%= behaviour.name %></td>
             <td class='text-center'><%= behaviour.count %></td>
             <td class='text-center'>
+              <% if (behaviour.count === 0) { %>
+                <i class="bi bi-box-arrow-up-right"></i>
+              <% } else { %>
               <a href="/behaviours/<%= behaviour.id %>">
                 <i class="bi bi-box-arrow-up-right"></i>
-              </a>
+              </a>  
+              <% } %>
             </td>
           </tr>
         <% }); %>

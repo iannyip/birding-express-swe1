@@ -8,6 +8,9 @@
     <div class="container mt-3">
       <h1> Bird Sightings</h1>
       <hr class='my-4'>
+      <form action="/note">
+        <button type="submit" class="btn btn-primary mb-4">Add New Note</button>
+      </form>
       <table class="table text-center">
         <thead>
           <tr>
@@ -15,6 +18,7 @@
             <th scope="col">Date</th>
             <th scope="col">Time</th>
             <th scope="col">Behaviour</th>
+            <th scope="col">Species</th>
             <th scope="col">Flock Size</th>
             <th scope="col">User</th>
             <th scope="col">Link</th>
@@ -27,9 +31,10 @@
               <th scope="row"><%= noteObj.id %></th>
               <th><%= noteObj.date %></th>
               <th><%= noteObj.time %></th>
-              <th><%= noteObj.name %></th>
+              <th><%= noteObj.behaviour %></th>
+              <th><%= noteObj.species %></th>
               <th class=""><%= noteObj.flock_size %></th>
-              <th class=""><%= noteObj.user_id %></th>
+              <th class=""><%= noteObj.email %></th>
               <th class=""><a href="/note/<%= noteObj.id %>">
                 <i class="bi bi-box-arrow-up-right"></i>
               </a></th>
